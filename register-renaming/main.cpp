@@ -1,7 +1,12 @@
 #include <fstream>
 #include <iostream>
+#include <memory>
+#include <sstream>
 #include <string>
+#include <unordered_map>
 #include <vector>
+#include "parser.h"
+#include "rename.h"
 
 using namespace std;
 
@@ -25,8 +30,16 @@ int main(int argc, char* argv[]) {
 		inputCode.push_back(line);
 	}
 	file.close();
-	for (size_t i = 0; i < inputCode.size(); i++) {
-		cout << inputCode[i] << endl;
+	auto result = parse(inputCode);
+	renameRegisters(result);
+	ofstream file2(outputFileName);
+	if (!file2) {
+		cout << "error writing output file:" << outputFileName << endl;
+		return -1;
 	}
+	for (size_t i = 0; i < result.size(); i++) {
+		file2 << result[i]->convert() << endl;
+	}
+	file2.close();
 	return 0;
 }
