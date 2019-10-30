@@ -5,7 +5,8 @@
 
 set<string> supportedInstructions() {
 	return {"move", "la",  "li",  "lw",  "lb",  "sw",
-			"add",  "sub", "mul", "div", "sll", "sllv"};
+			"add",  "sub", "mul", "div", "sll", "sllv",
+			"addi", "mult", "srl"};
 }
 
 void trim(std::string& str, const std::string& chars = "\t\n\v\f\r ") {
