@@ -11,37 +11,30 @@ using namespace std;
 
 queue<string> registerPool() {
 	queue<string> q;
-	q.push("$p0");
-	q.push("$p1");
-	q.push("$p2");
-	q.push("$p3");
-	q.push("$p4");
-	q.push("$p5");
-	q.push("$p6");
-	q.push("$p7");
-	q.push("$p8");
-	q.push("$p9");
-	q.push("$p10");
-	q.push("$p11");
-	q.push("$p12");
-	q.push("$p13");
-	q.push("$p14");
-	q.push("$p15");
-	q.push("$p16");
+	q.push("$t0");
+	q.push("$t1");
+	q.push("$t2");
+	q.push("$t3");
+	q.push("$t4");
+	q.push("$t5");
+	q.push("$t6");
+	q.push("$t7");
+	q.push("$t8");
+	q.push("$t9");
 	return q;
 }
 
 string extract(queue<string>& pool) {
 	if (pool.empty())
-		return "$reg";
+		return "$s0";
 	string result = (pool.front());
 	pool.pop();
 	return result;
 }
 
 bool safe(string s) {
-	static set<string> safeReg = {"$r0", "$r1", "$r2", "$r3",
-								  "$r4", "$r5", "$r6", "$r7"};
+	static set<string> safeReg = {"$t0", "$t1", "$t2", "$t3",
+								  "$t4", "$t5"};
 	return (safeReg.find(s) != safeReg.end());
 }
 
