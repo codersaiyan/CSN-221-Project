@@ -1,0 +1,25 @@
+\chapter{Theory}
+\section{Reorder Buffer}
+Renaming based on a reorder buffer uses a physical register file that is the same size as the architectural register file, together with a set of registers arranged as a queue data structure, called the reorder buffer
+
+As instruction execution proceeds, the assigned entry will ultimately be filled in by a value, representing the result of the instruction. When entries reach the head of the reorder buffer, provided they've been filled in with their actual intended result, they are removed, and each value is written to its intended architectural register. If the value is not yet available, then we must wait until it is.
+
+Because instructions take variable times to execute, and because they may be executed out of program order, we may well find that the reorder buffer entry at the head of the queue is still waiting to be filled, while later entries are ready. In this case, all entries behind the unfilled slots must stay in the reorder buffer until the head instruction completes.
+
+For example, consider the case of 6 instructions I1 – I6. Suppose at a given clock cycle that I1 and I2 both finish, and that at earlier clock cycles I4 to I6 also finished, but I3 is yet to complete. We can move the results for I1 and I2 out of the reorder buffer into their respective architectural registers. However, I4 to I6 must wait until I3 has completed.
+
+\section{Tomasulo Algorithm}
+Tomasulo’s algorithm is a computer architecture hardware algorithm for dynamic scheduling of instructions that allows out of order execution and enables more efficient use of multiple execution units. Every register is augmented by a busy bit. If the bit is off, the register holds the value needed by any instruction that references it. If the bit is set, the register holds the tag of the instruction that will produce the need value. When an instruction enters the decode stage, it is assigned a tag. It reads each source register, obtaining an input value or a tag, depending on the busy bit. The instruction writes its tag into its output register and sets that register’s busy bit. The instruction and its input values/tags are buffered in one of several reservation stations, depending on which functional unit it will execute in. At each cycle, a functional unit scans the instructions stored in its reservation station. An instruction may be ready, i.e., have both input values available, or waiting, i.e., one or more of its inputs is a tag, and the instruction cannot execute until some other instruction produces that input. The functional unit will select a ready instruction and start executing it. When an instruction completes, its result and tag are broadcast to all waiting instructions. Each waiting instruction compares this tag against the tags it is waiting on. If the tags match, the instruction overwrites the tag with the result. This may change the instructions status from waiting to ready. The result is also sent to the register file. If the tag in the output register is the same as that of the instruction, the value is written to the register file.
+
+Following concepts are important for implementing tomasulo’s algorithm:
+\begin{itemize}
+  \item Reservation station(RS)
+  \item Common data bus(CDB)
+  \item Register Renaming
+\end{itemize}
+
+\begin{enumerate}
+  \item Reservation Status: it’s the buffer to store order of instruction
+  \item Common Data Bus: The CDB connects reservation stations directly to functional units. According to Tomasulo it "preserves precedence while encouraging concurrency".
+  \item Register Renaming: All general-purpose and reservation station registers hold either a real value or a placeholder value. If a real value is unavailable to a destination register during the issue stage, a placeholder value is initially used. The placeholder value is a tag indicating which reservation station will produce the real value. When the unit finishes and broadcasts the result on the CDB, the placeholder will be replaced with the real value.
+\end{enumerate}
