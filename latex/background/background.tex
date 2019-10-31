@@ -1,0 +1,45 @@
+\chapter{Background}
+\section{Hazards}
+Instructions in a pipelined processor are performed in several stages, so that at any given time several instructions are being processed in the various stages of the pipeline which helps to increase clock frequency.  A hazard occurs when two or more of these simultaneous instructions conflict in the pipeline.
+
+
+Data hazards occur when instructions that exhibit data dependence modify data in different stages of a pipeline. There are three situations in which a data hazard can occur:
+\begin{itemize}
+  \item Read after Write (True data dependency)
+  \item Write after Read (False data dependency)
+  \item Write after Write (False data dependency)
+\end{itemize}
+\subsection{Read after write (RAW)}
+A read after write (RAW) data hazard refers to a situation where an instruction refers to a result that has not yet been calculated or retrieved. This can occur because even though an instruction is executed after a prior instruction, the prior instruction has been processed only partly through the pipeline.
+\\*
+For example:
+\begin{lstlisting}
+add $t2,$t1,$t3
+add $t4,$t2,$t3
+\end{lstlisting}
+The first instruction is calculating a value to be saved in register \$t2, and the second is going to use this value to compute a result for register \$t4. However, in the pipeline, when operands are fetched for the 2nd instructions, the results from the first will not yet have been saved, and hence a data dependency occurs.
+
+A data dependency occurs with instruction i2, as it is dependent on the completion of instruction i1. This type is dependency is unaffected by register renaming.
+
+\subsection{Write after read (WAR)}
+A write after read (WAR) data hazard represents a problem with concurrent execution.  \\*
+For Example:
+\begin{lstlisting}
+add $t4,$t1,$t5
+add $t5,$t1,$t2
+\end{lstlisting}
+
+In pipelining situation there is a chance that i2 may finish before i1, it must be ensured that the result of register \$t5 is not stored before i1 has had a chance to fetch the operands. It can be easily solved by register renaming.
+
+\subsection{Write after write (WAW)}
+(i2 tries to write an operand before it is written by i1) A write after write (WAW) data hazard may occur in a concurrent execution environment. \\*
+For example:
+\begin{lstlisting}
+add $t2,$t4,$t7 
+add $t2,$t1,$t3
+\end{lstlisting}
+
+The write back of i2 must be delayed until i1 finishes executing. It can be easily solved by register renaming.
+
+\section{Role of Register Renaming}
+Write after Read and Write after Write are two false dependencies which can be resolved by register renaming. Instead of delaying the write operation until all read operations are completed, two copies of the location can be maintained, the old value and the new value. Read operation that happens before the write operation of the new value can be provided with the old value while other read operations that follow the write operations are provided with the new value. The false dependency is broken and additional opportunities for out-of-order execution are created. When all reads that need the old value have been satisfied, it can be discarded. This is the essential concept behind register renaming.
