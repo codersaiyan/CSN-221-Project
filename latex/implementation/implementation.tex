@@ -1,0 +1,37 @@
+\chapter{Implementation}
+
+We have implemented a simplified version of register renaming model explained in the paper.
+As explained in the paper, the renaming of the register is done in the fetch cycle instead of decode cycle. This helps to eliminate false dependencies before complex pipeline phases. The program we have implemented is a simple asm transpiler which translates the MIPS assembly code to MIPS assembly code replacing the corresponding register. Since the asm file is statically transpiled, therefore control dependencies are impossible to demonstrate.
+Since the architected registers are mapped onto some subset of the available physical registers, therefore we are using a subset of temporal MIPS register for architecture register.
+MIPS architecture contains 10 temporal registers (named \$t0 to \$t9)
+Now imagine a machine containing 10 physical temporal  register ($t0 to $t9) and 6 architecture register ($t0 to $t5). So sample assembly code can only use those 6 architecture register for demonstration purpose. The transpiler will convert the assembly code and remove false dependencies by mapping those architecture register ($t0 to $t5) to ($t0 to $t9). Please note that actual renaming is register is not happening at hardware level, we are only renaming it in the source code for demonstration purpose. \\* \\*
+For example: \\* \\*
+\textbf{Input MIPS code (input.asm)}
+
+\begin{lstlisting}
+.data
+.text
+main:
+add $t0, $t1, $t2
+add $t2, $t0, $t0
+add $t0, $t0, $t0
+\end{lstlisting}
+
+\textbf{Transpiler commands}
+
+\begin{lstlisting}[language=bash]
+  $ ./register-renaming input.asm output.asm
+  input file:input.asm
+  output file:output.asm
+\end{lstlisting}
+
+\textbf{Output MIPS code (output.asm)}
+
+\begin{lstlisting}
+.data
+.text
+main:
+add $t2, $t0, $t1
+add $t3, $t2, $t2
+add $t4, $t2, $t2
+\end{lstlisting}
