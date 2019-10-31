@@ -1,0 +1,83 @@
+\documentclass[12pt]{extreport}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false}
+\usepackage{lscape}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{}
+\usepackage{mips}
+\usepackage{titlesec}
+
+\titleformat{\chapter}
+  {\Large\bfseries} % format
+  {}                % label
+  {0pt}             % sep
+  {\huge}
+
+% the following is needed for syntax highlighting
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\lstset{ %
+  language=[mips]Assembler,       % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\title{An Implementation Study of Register Renaming Logic}
+% Update supervisor and other title stuff in title/title.tex
+
+\begin{document}
+\input{title/title.tex}
+
+\begin{abstract}
+Most modern computer applications require that the computer system meets minimum requirements in order to run. One of those requirements is processor’s performance. Computer architects are trying to improve a processor's performance in every way possible. \\
+One of the ways of improving processor's performance is register renaming. A register is a small unit of fast storage quickly accessible to a computer's CPU. Every logical register has a set of physical registers associated with it. While a programmer in assembly language refers, for instance to a logical register \textbf{\$r0}, the processor transposes this name to one specific physical register. The physical registers are opaque and cannot be referenced directly but only via the canonical names. This property of CPU registers can be exploited to improve CPU performance. If in an assembly language, multiple instructions refer to the same registers (i.e. having same canonical names), but these instructions are independent of each other, we can simply change the canonical name of some of these registers. This will make these instructions eligible for parallel execution, thus reducing the number of CPU cycles per instruction. This helps to reveal more instruction level parallelism in an instruction stream. \\
+Register renaming helps to remove false data dependencies. This project will help us understand how this elegant technique is implemented in modern processors and how it affects the CPU performance. This project will cover some register renaming algorithms (implementation and analysis).
+
+\end{abstract}
+\tableofcontents
+\input{whywechoosethis/whywechoosethis.tex}
+\input{gantt/ganntchart.tex}
+\input{background/background.tex}
+\input{register_renaming/register_renaming_technique.tex}
+\input{project/project.tex}
+\input{implementation/implementation.tex}
+\input{references/references.tex}
+
+\end{document}
