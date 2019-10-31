@@ -1,0 +1,7 @@
+\chapter{Why we choose this topic?}
+
+Pipeline hazards prevent next instruction from executing during designated clock cycle.There are 3 classes of pipeline hazards one of them is data hazards which occur when given instruction depends on data from an instruction ahead of it in pipeline.To eliminate data hazards one of the ways is register renaming.	
+
+Register renaming is an elegant technique which helps to remove data hazards: Write after Read(False Dependency) and Write after Write(False Dependency).The principle of register renaming is straightforward. If the processor encounters an instruction that addresses a destination register, it temporarily writes the instruction’s result into a dynamically allocated rename buffer rather than into the specified destination register.Renaming increases the average number of instructions that are available for parallel execution per cycle.
+
+This technique is interesting because virtually all recent superscalars rename registers to boost performance and system performance.Besides this data hazards and pipelining are in our \textbf{CSN 221} course structure so we find it amusing to gain in depth knowledge about eliminating data hazards.
